@@ -112,7 +112,7 @@ const NoUserDetail = () => {
 				) : (
 					<Download>No pitch Deck yet</Download>
 				)}
-				{/* <Button>Download our pitch</Button> */}
+
 				<Details>
 					<Detail1>
 						<TitleProps text="Get To Know Us" />
@@ -121,7 +121,7 @@ const NoUserDetail = () => {
 								{journey?.journey[0]?.vision ? (
 									journey?.journey[0]?.vision
 								) : (
-									<p>{brand?.brand[0]?.about}</p>
+									<p>No data yet</p>
 								)}
 							</p>
 						</DetailText>
@@ -133,7 +133,7 @@ const NoUserDetail = () => {
 								{journey?.journey[0]?.why ? (
 									journey?.journey[0]?.why
 								) : (
-									<p>{brand?.brand[0]?.about}</p>
+									<p>No data yet</p>
 								)}
 							</p>
 						</DetailText>
@@ -141,16 +141,23 @@ const NoUserDetail = () => {
 					<Detail1>
 						<TitleProps text="our various events" />
 						<DetailImage>
-							{event?.event?.map((props) => (
-								<CardDesign
-									key={props._id}
-									image={props.image}
-									title={props.title}
-									text={props.description}
-								/>
-							))}
+							{event?.event.length > 0 ? (
+								<div>
+									{event?.event?.map((props) => (
+										<CardDesign
+											key={props._id}
+											image={props.image}
+											title={props.title}
+											text={props.description}
+										/>
+									))}
+								</div>
+							) : (
+								<p>No Recorded Event, yet</p>
+							)}
 						</DetailImage>
 					</Detail1>
+
 					<Detail1>
 						<TitleProps text="more usecases" />
 						<DetailText>
@@ -158,7 +165,7 @@ const NoUserDetail = () => {
 								{journey?.journey[0]?.focus ? (
 									journey?.journey[0]?.focus
 								) : (
-									<p>{brand?.brand[0]?.about}</p>
+									<p>No data yet</p>
 								)}
 							</p>
 							<p></p>
@@ -181,7 +188,7 @@ const NoUserDetail = () => {
 							? `https://www.youtube.com/embed/${
 									video?.video[0]?.videoURL.split("=")[1]
 							  }`
-							: "https://www.youtube.com/embed/nA7qa6M47rs"
+							: "https://www.youtube.com/embed/IzHUw-ryosQ"
 					}
 					poster="https://media.wired.com/photos/5cc244c9af643e2f373ebb28/191:100/w_2400,h_1256,c_limit/Coding-Becomes-Criminal.jpg"
 					frameborder="0"
@@ -199,12 +206,12 @@ const NoUserDetail = () => {
 							{video?.video[0]?.title ? (
 								video?.video[0]?.title
 							) : (
-								<p>Hear's the story of john23</p>
+								<p>No Video description yet</p>
 							)}
 						</VidTitle>
 						<Date>
-							Posted{" "}
-							<strong>{moment().fromNow(video?.video[0]?.createdAt)}</strong>
+							Posted {video?.video[0]?.createdAt}
+							<strong>{moment(video?.video[0]?.createdAt).fromNow()}</strong>
 						</Date>
 					</RestText>
 					<RightIcon>
@@ -312,7 +319,7 @@ const Info = styled.div`
 const Logo = styled.img`
 	width: 60px;
 	height: 60px;
-	object-fit: contain;
+	object-fit: cover;
 	border: 1px solid rgba(0, 0, 0, 0.5);
 	border-radius: 100%;
 	background: white;

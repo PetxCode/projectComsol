@@ -18,6 +18,9 @@ import JourneyForm from "./Holder/OtherForms/JourneyForm";
 import ScrollToTop from "./ScrollToTop";
 import VideoForm from "./Holder/OtherForms/VideoForm";
 import EventForm from "./Holder/OtherForms/EventForm";
+import ResetPassword from "./Holder/Register/ResetPassword";
+import ForgetPassword from "./Holder/Register/ForgetPassword";
+import EmailVerified from "./Holder/Register/EmailVerified";
 function App() {
 	return (
 		<BrowserRouter>
@@ -29,7 +32,12 @@ function App() {
 					<Route path="/register" element={<Register />} />
 					<Route path="/signin" element={<SignIn />} />
 					<Route path="/:id/detail" element={<NoUserDetail />} />
-					{/* <Route path="/detail" element={<NoUserDetail />} /> */}
+					<Route path="/reset_password" element={<ResetPassword />} />
+					<Route
+						path="/api/user/reset/:id/:token"
+						element={<ForgetPassword />}
+					/>
+					<Route path="/api/user/:id/:token" element={<EmailVerified />} />
 					<Route path="/categories" element={<Category />} />
 					<Route
 						path="/dashboard/video_form"

@@ -63,8 +63,10 @@ const Container = styled.div`
 	border-radius: 5px;
 	overflow: hidden;
 	position: relative;
+
 	@media screen and (max-width: 768px) {
-		margin: 20px;
+		margin: 10px;
+		width: 95%;
 	}
 `;
 
@@ -83,7 +85,7 @@ const Overlay = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-	padding-left: 20px;
+	padding: 5px 10px;
 `;
 
 const Title = styled.div`

@@ -15,6 +15,8 @@ const Result = () => {
 		dispatch(allUsers(res.data.data));
 	};
 
+	console.log("Get FIles: ", data);
+
 	useEffect(() => {
 		getData();
 	}, []);
@@ -25,39 +27,9 @@ const Result = () => {
 			<CardHolder>
 				{data?.map((props) => (
 					<div key={props._id}>
-						{props.brand.length > 1 ? <CardProps props={props} /> : null}
+						{props.brand.length > 0 ? <CardProps props={props} /> : null}
 					</div>
 				))}
-
-				{/*         
-				<CardProps
-					image="/assets/prop2.jpg"
-					logo="/assets/logo2.png"
-					name="Dream From The slum"
-					slogan="A hand the gives never lacks"
-					text={`title: "You have", special: "to be seen", title1: "and heard by peaople
-        that metters", subTitle: "Create a new pipeline or choose an existing
-        one and add this app to a stage in it.", title: "You have", special: "to
-        be seen", title1: "and heard by peaople that metters", subTitle: "Create
-        a new pipeline or choose an existing one and add this app to a stage in
-        it.", be seen", title1: "and heard by peaople that metters", subTitle:
-        "Create a new pipeline or choose an existing one and add this app to a
-        stage in it.",`}
-				/>
-				<CardProps
-					image="/assets/prop3.jpg"
-					logo="/assets/logo3.jpg"
-					name="Elisha Foundation"
-					slogan="Helping the community"
-					text={`title: "You have", special: "to be seen", title1: "and heard by peaople
-        that metters", subTitle: "Create a new pipeline or choose an existing
-        one and add this app to a stage in it.", title: "You have", special: "to
-        be seen", title1: "and heard by peaople that metters", subTitle: "Create
-        a new pipeline or choose an existing one and add this app to a stage in
-        it.", be seen", title1: "and heard by peaople that metters", subTitle:
-        "Create a new pipeline or choose an existing one and add this app to a
-        stage in it.",`}
-				/> */}
 			</CardHolder>
 		</Container>
 	);
@@ -93,7 +65,7 @@ const CardHolder = styled.div`
 	padding-bottom: 20px;
 
 	@media screen and (max-width: 1188px) {
-		justify-content: space-around;
+		justify-content: flex-start;
 		width: 100%;
 	} ;
 `;

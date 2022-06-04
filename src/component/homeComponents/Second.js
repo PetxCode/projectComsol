@@ -42,8 +42,22 @@ const SmallImage = styled.img`
 	object-fit: cover;
 	border-radius: 0 30px;
 	margin: 10px;
+
+	transition: all 350ms;
+	transform: scale(1);
+
+	:hover {
+		cursor: pointer;
+		transform: scale(1.005);
+		box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+			rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+	}
+
 	@media screen and (max-width: 900px) {
-		margin: 10px 0;
+		margin: 10px;
+		width: 100%;
+		height: 200px;
+		border-radius: 0 10px;
 	}
 `;
 
@@ -80,7 +94,7 @@ const COntent = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-left: 50px;
+	/* margin-left: 50px; */
 	width: 50%;
 	margin-top: 30px;
 
@@ -98,11 +112,13 @@ const Image = styled.img`
 	text-transform: uppercase;
 	font-weight: bold;
 	border-radius: 70px 0px 70px 70px;
-	transition: all 350ms;
-	transform: scale(1);
+
 	margin-top: 40px;
 	height: 100%;
 	object-fit: cover;
+
+	transition: all 350ms;
+	transform: scale(1);
 
 	:hover {
 		cursor: pointer;
@@ -112,6 +128,10 @@ const Image = styled.img`
 	}
 	@media screen and (max-width: 900px) {
 		width: 90%;
+		margin-top: 20px;
+		margin: 0;
+		padding: 5px;
+		border-radius: 20px 0px 20px 20px;
 	}
 `;
 const Wrapper = styled.div`
@@ -123,7 +143,8 @@ const Wrapper = styled.div`
 	@media screen and (max-width: 1200px) {
 		display: flex;
 		flex-direction: column;
-		width: 90%;
+		width: 95%;
+		height: 100%;
 		align-items: center;
 	}
 `;

@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, userDetails } from "../../GlobalState/Redux";
 
@@ -16,6 +16,7 @@ const SignIn = () => {
 
 	const navigate = useNavigate();
 	const [count, setCount] = useState(2);
+	const [show, setShow] = useState("");
 	const [quote, setQuote] = useState([
 		{
 			id: 1,
@@ -60,6 +61,9 @@ const SignIn = () => {
 		const res = await axios.post(url, { email, password });
 		console.log(res);
 		if (res) {
+			setShow(res.data.message);
+			console.log(res);
+
 			localStorage.setItem("authUser", JSON.stringify(res.data.data));
 			dispatch(createUser(res.data.data));
 
@@ -68,7 +72,7 @@ const SignIn = () => {
 			dispatch(userDetails(pushData.data.data));
 		}
 
-		reset();
+		// reset();
 		navigate("/");
 	});
 
@@ -142,6 +146,11 @@ const SignIn = () => {
 								/>
 
 								<Button type="submit">Signin </Button>
+								<Div>
+									Forgot password{" "}
+									<Span to="/reset_password">Click here to reset</Span>{" "}
+								</Div>
+								<LabelError>{show ? show : null}</LabelError>
 							</Form>
 						</HolderCard>
 					</Holder>
@@ -176,6 +185,17 @@ const SignIn = () => {
 
 export default SignIn;
 
+const Span = styled(Link)`
+	text-decoration: none;
+	color: #ffb850;
+	margin-left: 5px;
+	justify-content: center;
+`;
+
+const Div = styled.div`
+	display: flex;
+	margin-top: 10px;
+`;
 const LabelError = styled.div`
 	color: red;
 	font-size: 13px;

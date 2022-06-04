@@ -12,8 +12,6 @@ const CardProps = ({ props }) => {
 	const [brandName, setBrandName] = useState("");
 	const [mySlogan, setMySlogan] = useState("");
 
-	console.log(id);
-
 	const getBrand = async () => {
 		const url = `https://project-comsol.herokuapp.com/api/brand/${id}/view`;
 		const res = await axios.get(url);
@@ -22,7 +20,7 @@ const CardProps = ({ props }) => {
 
 	useEffect(() => {
 		getBrand();
-	}, [data]);
+	}, []);
 
 	return (
 		<div>
@@ -83,11 +81,13 @@ const Container = styled.div`
 	box-shadow: 1px 3px 7px rgba(0, 0, 0, 0.2);
 
 	@media screen and (max-width: 1188px) {
-		margin: 15px;
+		margin: 10px auto;
+		/* width: 95%; */
 	}
-	@media screen and (max-width: 354px) {
+	@media screen and (max-width: 454px) {
 		min-height: 470px;
 		overflow: none;
+		width: 95%;
 	}
 `;
 
@@ -111,6 +111,7 @@ const Logo = styled.img`
 	background: white;
 	border: 1px solid rgba(0, 0, 0, 0.2);
 	margin-right: 15px;
+	object-fit: cover;
 `;
 
 const Texts = styled.div``;

@@ -57,6 +57,7 @@ const Icon = styled(AiFillDelete)`
 `;
 
 const Container = styled.div`
+	z-index: 10;
 	margin: 10px;
 	width: 190px;
 	height: 150px;

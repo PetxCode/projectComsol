@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
 	const navigate = useNavigate();
@@ -44,6 +44,7 @@ const Register = () => {
 		}
 	};
 
+	const [show, setShow] = useState("");
 	const [avatar, setAvatar] = useState("");
 	const [image, setImage] = useState(
 		"https://firebasestorage.googleapis.com/v0/b/codelab-admission.appspot.com/o/social%2Fsimple.png?alt=media&token=99f4b576-37f6-4ba3-8716-686effea539f"
@@ -76,7 +77,8 @@ const Register = () => {
 
 	const onSubmit = handleSubmit(async (data) => {
 		console.log(data);
-		const url = "https://project-comsol.herokuapp.com/api/user/created";
+		const url2 = "http://localhost:3550/api/user/register";
+		const url = "https://project-comsol.herokuapp.com/api/user/register";
 
 		const { userName, email, password } = data;
 		const formData = new FormData();
@@ -91,10 +93,12 @@ const Register = () => {
 			},
 		};
 
-		await axios.post(url, formData, config);
+		const res = await axios.post(url, formData, config);
 
-		reset();
-		navigate("/signin");
+		setShow(res.data.message);
+
+		// reset();
+		// navigate("/signin");
 	});
 
 	const textColor = useRef();
@@ -176,6 +180,12 @@ const Register = () => {
 								>
 									Register{" "}
 								</Button>
+								<Div>
+									Forgot password{" "}
+									<Span to="/reset_password">Click here to reset</Span>{" "}
+								</Div>
+
+								<LabelError>{show}</LabelError>
 							</Form>
 						</HolderCard>
 					</Holder>
@@ -209,6 +219,18 @@ const Register = () => {
 };
 
 export default Register;
+
+const Span = styled(Link)`
+	text-decoration: none;
+	color: #ffb850;
+	margin-left: 5px;
+	justify-content: center;
+`;
+
+const Div = styled.div`
+	display: flex;
+	margin-top: 10px;
+`;
 
 const LabelError = styled.div`
 	color: red;

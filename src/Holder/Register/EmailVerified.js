@@ -1,22 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { MdExpandLess } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "./base";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser, userDetails } from "../../GlobalState/Redux";
 
-const PitchForm = () => {
-	const getData = useSelector((state) => state.currentUser);
-	const id = getData._id;
-	console.log(id);
+const EmailVerified = () => {
+	const dispatch = useDispatch();
+	const { id, token } = useParams();
+	const user = useSelector((state) => state.currentUser);
+
 	const navigate = useNavigate();
 	const [count, setCount] = useState(2);
-	const [deck, setDeck] = useState("");
 	const [quote, setQuote] = useState([
 		{
 			id: 1,
@@ -38,6 +37,30 @@ const PitchForm = () => {
 		},
 	]);
 
+	const schemaModel = yup.object().shape({});
+
+	const {
+		register,
+		reset,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schemaModel),
+	});
+
+	const onSubmit = handleSubmit(async (data) => {
+		navigate("/signin");
+	});
+
+	const getUser = async () => {
+		try {
+			const url = `https://project-comsol.herokuapp.com/api/user/${id}/${token}`;
+			await axios.get(url);
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+	console.log(id, token);
 	const increase = () => {
 		setCount(count + 1);
 	};
@@ -50,84 +73,6 @@ const PitchForm = () => {
 			setCount(count - 1);
 		}
 	};
-
-	const [avatar, setAvatar] = useState("");
-	const [image, setImage] = useState(
-		"https://firebasestorage.googleapis.com/v0/b/codelab-admission.appspot.com/o/social%2Fsimple.png?alt=media&token=99f4b576-37f6-4ba3-8716-686effea539f"
-	);
-
-	const handleImage = (e) => {
-		const file = e.target.files[0];
-		const save = URL.createObjectURL(file);
-		setImage(save);
-		setAvatar(file);
-
-		const storageRef = ref(storage, "/pitchDeck" + file.name);
-
-		const uploadTask = uploadBytesResumable(storageRef, file);
-
-		uploadTask.on(
-			"state_changed",
-			(snapshot) => {
-				const progress =
-					(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-				console.log("Upload is " + progress + "% done");
-			},
-			(error) => {
-				console.log(error.message);
-			},
-			() => {
-				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-					console.log("File available at", downloadURL);
-					setDeck(downloadURL);
-				});
-			}
-		);
-	};
-
-	const schemaModel = yup.object().shape({
-		title: yup.string().required("This field has to be filled"),
-		detail: yup.string().required("This field has to be filled"),
-		// url: yup.string().required("This field has to be filled"),
-	});
-
-	const {
-		register,
-		reset,
-		handleSubmit,
-		formState: { errors },
-	} = useForm({
-		resolver: yupResolver(schemaModel),
-	});
-
-	const onSubmit = handleSubmit(async (data) => {
-		console.log(data);
-		const urlData = `https://project-comsol.herokuapp.com/api/pitch/${id}/create`;
-
-		let { title, detail } = data;
-
-		let url = deck;
-
-		console.log(title, detail, url);
-
-		// const formData = new FormData();
-		// formData.append("userName", title);
-		// formData.append("email", detail);
-
-		// formData.append("pitch", avatar);
-
-		const config = {
-			headers: {
-				// "content-type": "multipart/form-data",
-				authorization: `CodeLab ${getData.token}`,
-			},
-		};
-
-		await axios.post(urlData, { title, detail, url }, config);
-
-		reset();
-		navigate("/");
-	});
 
 	const textColor = useRef();
 	const textColor1 = useRef();
@@ -153,6 +98,7 @@ const PitchForm = () => {
 	useEffect(() => {
 		decrease();
 		increase();
+		getUser();
 	}, []);
 
 	return (
@@ -161,42 +107,10 @@ const PitchForm = () => {
 				<Content>
 					<Holder>
 						<HolderCard>
-							<Welcome>Create your Pitch Deck</Welcome>
-							<SubTitle>
-								Glad you are here... Let's help get seen, starting with your
-								Pitch deck!
-							</SubTitle>
-							<Form onSubmit={onSubmit} type="multipart/form-data">
-								<ImageHolder>
-									<ImageView src={image} />
-									<ImageInput onChange={handleImage} type="file" id="img" />
-									<ImageLabel htmlFor="img">Choose Your Best Pitch</ImageLabel>
-								</ImageHolder>
-
-								<Label>Title your PitchDeck</Label>
-								<LabelError>{errors.title && errors?.title.message}</LabelError>
-								<Input
-									placeholder="Title your PitchDeck"
-									{...register("title")}
-								/>
-
-								<Label>Give detail about your Pitch Deck </Label>
-								<LabelError>
-									{errors.detail && errors?.detail.message}
-								</LabelError>
-								<Input
-									placeholder="Give detail about your Pitch Deck"
-									{...register("detail")}
-								/>
-
-								<Button
-									type="submit"
-									onClick={() => {
-										console.log("This is Button");
-									}}
-								>
-									Upload your Pitch{" "}
-								</Button>
+							<Welcome>Your Email has been Verified</Welcome>
+							<SubTitle>Glad you are back... Let's help get seen!</SubTitle>
+							<Form onSubmit={onSubmit}>
+								<Button type="submit"> Signin </Button>
 							</Form>
 						</HolderCard>
 					</Holder>
@@ -229,8 +143,19 @@ const PitchForm = () => {
 	);
 };
 
-export default PitchForm;
+export default EmailVerified;
 
+const Span = styled(Link)`
+	text-decoration: none;
+	color: #ffb850;
+	margin-left: 5px;
+	justify-content: center;
+`;
+
+const Div = styled.div`
+	display: flex;
+	margin-top: 10px;
+`;
 const LabelError = styled.div`
 	color: red;
 	font-size: 13px;
@@ -249,9 +174,10 @@ const Dot1 = styled.div`
 	background-color: white;
 	margin: 20px 8px;
 `;
+
 const ImageHolder = styled.div`
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	flex-direction: column;
 `;
 
@@ -259,16 +185,14 @@ const ImageView = styled.img`
 	width: 150px;
 	height: 150px;
 	border-radius: 5px;
-	border: 3px solid #1e4c3d;
+	background-color: #ffb850;
 	margin: 20px 0;
-	object-fit: cover;
 `;
 
 const ImageLabel = styled.label`
-	text-align: center;
-	padding: 20px 20px;
+	padding: 20px 0;
 	background-color: #ffb850;
-	/* width: 150px; */
+	width: 150px;
 	border-radius: 30px;
 	font-weight: bold;
 	transition: all 350ms;
@@ -336,10 +260,8 @@ const Form = styled.form`
 	}
 `;
 const SubTitle = styled.div`
-	margin: 15px 0;
-	@media screen and (max-width: 425px) {
-		text-align: center;
-	}
+	margin-top: 20px;
+	margin-bottom: 20px;
 `;
 
 const Welcome = styled.div`
@@ -347,23 +269,23 @@ const Welcome = styled.div`
 	font-weight: bold;
 	letter-spacing: 0.1px;
 	line-height: 1;
-	margin-top: 20px;
 
 	@media screen and (max-width: 425px) {
-		width: 100%;
+		width: 90%;
 		text-align: center;
+		margin-top: 100px;
 		font-size: 30px;
 	}
 `;
 
-const HolderCard = styled.div``;
+const HolderCard = styled.div`
+	@media screen and (max-width: 425px) {
+		width: 100%;
+	}
+`;
 
 const Holder = styled.div`
 	padding-left: 50px;
-
-	@media screen and (max-width: 425px) {
-		padding: 0px;
-	}
 `;
 
 const Content = styled.div`
@@ -371,12 +293,11 @@ const Content = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	justify-content: center;
 	color: #1e4c3d;
 
 	@media screen and (max-width: 425px) {
 		width: 100%;
-		padding-top: 120px;
 	}
 `;
 
@@ -405,7 +326,6 @@ const Dots = styled.div`
 		display: flex;
 		justify-content: center;
 		align-items: center;
-
 		transform: rotate(180deg);
 	}
 `;
@@ -444,9 +364,7 @@ const Ball = styled.div`
 	width: 100%;
 `;
 
-const Position = styled.div`
-	margin-bottom: 20px;
-`;
+const Position = styled.div``;
 
 const Name = styled.div`
 	font-weight: 700;
@@ -482,7 +400,7 @@ const Card = styled.div`
 
 const ImageWrapper = styled.div`
 	width: 50%;
-	background-image: url("/assets/pp.jpg");
+	background-image: url("/assets/group.jpg");
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -506,10 +424,4 @@ const Container = styled.div`
 	width: 100%;
 	height: calc(100vh - 100px);
 	padding-top: 100px;
-
-	@media screen and (max-width: 425px) {
-		width: 100%;
-		height: 100%;
-		padding-top: 0px;
-	}
 `;

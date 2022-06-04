@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { mainData } from "../../GlobalState/Redux";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 const DetailsUser = () => {
 	const getData = useSelector((state) => state.currentUser);
@@ -62,7 +63,7 @@ const DetailsUser = () => {
 
 		console.log(deleteID);
 
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	const getJorney = async () => {
@@ -226,19 +227,42 @@ const DetailsUser = () => {
 								</div>
 							</PathMove>
 							<Diva>
-								{event?.event?.map((props) => (
-									<CardProps
-										key={props._id}
-										props={props}
-										onClick={() => {
-											console.log(props._id);
-											deleteEvent(props._id);
-										}}
-										image={props.image}
-										title={props.title}
-										text={props.description}
-									/>
-								))}
+								{event?.event.length > 0 ? (
+									<div>
+										{event?.event?.map((props) => (
+											<CardProps
+												key={props._id}
+												props={props}
+												onClick={() => {
+													Swal.fire({
+														title: "Are you sure?",
+														text: "You won't be able to revert this!",
+														icon: "warning",
+														showCancelButton: true,
+														confirmButtonColor: "#3085d6",
+														cancelButtonColor: "#d33",
+														confirmButtonText: "Yes, delete it!",
+													}).then((result) => {
+														if (result.isConfirmed) {
+															Swal.fire(
+																"Deleted!",
+																"Your file has been deleted.",
+																"success"
+															);
+
+															deleteEvent(props._id);
+														}
+													});
+												}}
+												image={props.image}
+												title={props.title}
+												text={props.description}
+											/>
+										))}
+									</div>
+								) : (
+									<p>No Recorded Event, yet</p>
+								)}
 							</Diva>
 							<div></div>
 						</DetailImage>
@@ -268,13 +292,14 @@ const DetailsUser = () => {
 			<Right>
 				<RightHead>Here's a brief Pitch video of our work</RightHead>
 				<Line />
+
 				<Youtube
 					src={
 						video?.video[0]?.videoURL
 							? `https://www.youtube.com/embed/${
 									video?.video[0]?.videoURL.split("=")[1]
 							  }`
-							: "https://www.youtube.com/embed/nA7qa6M47rs"
+							: "https://www.youtube.com/embed/IzHUw-ryosQ"
 					}
 					// src="https://www.youtube.com/embed/nA7qa6M47rs"
 					// src="https://www.youtube.com/embed/Ti8QNiRRzOA"
@@ -291,7 +316,7 @@ const DetailsUser = () => {
 							{video?.video[0]?.title ? (
 								video?.video[0]?.title
 							) : (
-								<p>Hear's the story of john23</p>
+								<p>No Video description yet</p>
 							)}
 						</VidTitle>
 						<Date>

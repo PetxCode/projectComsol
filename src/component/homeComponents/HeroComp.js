@@ -84,7 +84,7 @@ const HeroComp = () => {
 export default HeroComp;
 
 const Button = styled.div`
-	padding: 20px 10px;
+	padding: 10px 30px;
 	background-color: #ffb850;
 	width: 180px;
 	font-size: 20px;
@@ -97,6 +97,26 @@ const Button = styled.div`
 	transition: all 350ms;
 	transform: scale(1);
 	margin-top: 40px;
+	animation: {
+		animation-duration: 2s;
+		animation-timing-function: linear;
+		animation-delay: 0s;
+		animation-iteration-count: infinite;
+		animation-direction: normal;
+		animation-fill-mode: none;
+		animation-play-state: running;
+		animation-name: animate;
+	}
+	/* animation: {
+		animation-timing-function: linear;
+		animation-duration: 2s;
+		animation-delay: 0s;
+		animation-iteration-count: infinite;
+		animation-direction: normal;
+		animation-fill-mode: none;
+		animation-play-state: running;
+		animation-name: animate;
+	} */
 
 	:hover {
 		cursor: pointer;
