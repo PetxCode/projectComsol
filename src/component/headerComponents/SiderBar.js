@@ -35,7 +35,7 @@ const SiderBar = ({ toggle, setToggle, onToggle }) => {
 					LogIn
 				</Button>
 				<Button
-					to="/signup"
+					to="/register"
 					onClick={() => {
 						setToggle(false);
 					}}
